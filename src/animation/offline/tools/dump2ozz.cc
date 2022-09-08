@@ -72,7 +72,7 @@ class DumpConverter : public ozz::animation::offline::OzzImporter {
   }
 };
 
-int main(int _argc, const char** _argv) {
+/*int main(int _argc, const char** _argv) {
   DumpConverter converter;
   return converter(_argc, _argv);
-}
+}*/

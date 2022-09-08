@@ -43,7 +43,9 @@
 #include "ozz/base/maths/math_ex.h"
 #include "ozz/base/maths/simd_math.h"
 
-#define TINYGLTF_IMPLEMENTATION
+#include <algorithm>
+
+//#define TINYGLTF_IMPLEMENTATION
 
 // No support for image loading or writing
 #define TINYGLTF_NO_STB_IMAGE
@@ -902,7 +904,7 @@ class GltfImporter : public ozz::animation::offline::OzzImporter {
   tinygltf::Model m_model;
 };
 
-int main(int _argc, const char** _argv) {
+/*int main(int _argc, const char** _argv) {
   GltfImporter converter;
   return converter(_argc, _argv);
-}
+}*/

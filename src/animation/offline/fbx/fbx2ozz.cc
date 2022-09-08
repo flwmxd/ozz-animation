@@ -29,10 +29,10 @@
 
 #include "ozz/base/log.h"
 
-int main(int _argc, const char** _argv) {
+/*int main(int _argc, const char** _argv) {
   Fbx2OzzImporter converter;
   return converter(_argc, _argv);
-}
+}*/
 
 Fbx2OzzImporter::Fbx2OzzImporter()
     : settings_(fbx_manager_), scene_loader_(nullptr) {}
