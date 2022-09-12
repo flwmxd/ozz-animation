@@ -160,7 +160,7 @@ vector<math::Transform> SkeletonRestPoseSoAToAoS(const Skeleton& _skeleton) {
 
 bool Export(OzzImporter& _importer, const RawAnimation& _input_animation,
             const Skeleton& _skeleton, const Json::Value& _config,
-            const ozz::Endianness _endianness) {
+            const ozz::Endianness _endianness, const std::string& prefix) {
   // Raw animation to build and output. Initial setup is just a copy.
   RawAnimation raw_animation = _input_animation;
 
@@ -282,9 +282,10 @@ bool Export(OzzImporter& _importer, const RawAnimation& _input_animation,
     // as it would leave an invalid file on the disk.
 
     // Builds output filename.
-    ozz::string filename = _importer.BuildFilename(
-        _config["filename"].asCString(), raw_animation.name.c_str());
-
+ 
+//@maple - add
+    ozz::string filename = ozz::string(prefix) + _importer.BuildFilename(_config["filename"].asCString(), raw_animation.name.c_str());
+//@maple - add
     ozz::log::LogV() << "Opens output file: \"" << filename << "\""
                      << std::endl;
     ozz::io::File file(filename.c_str(), "wb");
@@ -315,7 +316,8 @@ bool Export(OzzImporter& _importer, const RawAnimation& _input_animation,
 
 bool ProcessAnimation(OzzImporter& _importer, const char* _animation_name,
                       const Skeleton& _skeleton, const Json::Value& _config,
-                      const ozz::Endianness _endianness) {
+                      const ozz::Endianness _endianness,
+                      const std::string& prefix) {
   RawAnimation animation;
 
   ozz::log::Log() << "Extracting animation \"" << _animation_name << "\""
@@ -330,7 +332,7 @@ bool ProcessAnimation(OzzImporter& _importer, const char* _animation_name,
     // Give animation a name
     animation.name = _animation_name;
 
-    return Export(_importer, animation, _skeleton, _config, _endianness);
+    return Export(_importer, animation, _skeleton, _config, _endianness, prefix);
   }
 }
 }  // namespace
@@ -374,6 +376,9 @@ bool ImportAnimations(const Json::Value& _config, OzzImporter* _importer,
   if (!success)
     return false;
 
+   std::string prefix =
+      _config["input_path"].asString() + _config["input_filename"].asString();
+
   // Loop though all existing animations, and export those who match
   // configuration.
   for (Json::ArrayIndex i = 0; i < animations_config.size(); ++i) {
@@ -395,7 +400,7 @@ bool ImportAnimations(const Json::Value& _config, OzzImporter* _importer,
       }
       ++num_not_clip_animation;
       const bool anisuccess = ProcessAnimation(*_importer, animation_name, *skeleton,
-                                animation_config, _endianness);
+                           animation_config, _endianness, prefix);
       if(anisuccess){
         ++num_valid_animation;
       }

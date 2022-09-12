@@ -112,7 +112,7 @@ namespace ozz {
 namespace animation {
 namespace offline {
 
-int OzzImporter::operator()(int _argc, const char** _argv) {
+int OzzImporter::operator()(int _argc, const char** _argv, const char* _input) {
   // Parses arguments.
   ozz::options::ParseResult parse_result = ozz::options::ParseCommandLine(
       _argc, _argv, "2.0",
@@ -133,6 +133,9 @@ int OzzImporter::operator()(int _argc, const char** _argv) {
     return EXIT_FAILURE;
   }
 
+
+
+
   // Ensures file to import actually exist.
   if (!ozz::io::File::Exist(OPTIONS_file)) {
     ozz::log::Err() << "File \"" << OPTIONS_file << "\" doesn't exist."
@@ -148,6 +151,15 @@ int OzzImporter::operator()(int _argc, const char** _argv) {
     return EXIT_FAILURE;
   }
 
+  //@maple - add
+  config["input_path"] = _input;
+  config["input_filename"] = _argv[0];
+
+  const auto fileName = config["skeleton"]["filename"].asString();
+  config["skeleton"]["filename"] = _input + std::string(_argv[0]) + fileName;
+
+  //@maple - add
+  
   // Handles skeleton import processing
   if (!ImportSkeleton(config, this, endianness)) {
     return EXIT_FAILURE;

@@ -61,7 +61,7 @@ class OZZ_ANIMTOOLS_DLL OzzImporter {
 
   // Function operator that must be called with main() arguments to start import
   // process.
-  int operator()(int _argc, const char** _argv);
+  int operator()(int _argc, const char** _argv, const char* _input = "");
 
   // Loads source data file.
   // Returning false will report and error.
